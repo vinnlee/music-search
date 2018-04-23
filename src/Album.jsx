@@ -10,7 +10,7 @@ class Album extends Component {
                 <h3 className="album-title">The Hottest Albums of this singer</h3>
             {
                 topalbum.map((album, index) => {
-                    let albumImage = (album.image[3]['#text'] !== "") ? album.image[3]['#text'] : "http://via.placeholder.com/300x300?text=Image+Not+Found";
+                    let albumImage = (album.image[3]['#text'] !== "") ? album.image[3]['#text'] : "https://via.placeholder.com/300x300?text=Image+Not+Found";
                     return(
                         <Col xs={6} md={4} key={index}>
                             <Thumbnail src={albumImage} alt="" href={album.url} className="album-card">

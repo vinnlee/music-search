@@ -15,7 +15,7 @@ class App extends Component {
     }
 
     search() {
-        const ROOT_URL = "http://ws.audioscrobbler.com/2.0/";
+        const ROOT_URL = "https://ws.audioscrobbler.com/2.0/";
         const API_KEY  = "4f252d962d0d150de60957d3e904dc27";
         const GET_ARTIST = "artist.getinfo";
         const GET_ALBUM = "artist.gettopalbums";
