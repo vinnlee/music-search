@@ -34,11 +34,11 @@ class Profile extends Component {
             <div className="result-container">
                 <Media className="profile">
                     <Media.Left>
-                        <Image src={artist.image[2]['#text']} />
+                      <Image src={artist.image[2]['#text']} />
                     </Media.Left>
                     <Media.Body>
-                        <Media.Heading className="artist-name">{artist.name}</Media.Heading>
-                        <p className="artist-summary" dangerouslySetInnerHTML={{__html: artist.bio.summary}} />
+                      <Media.Heading>{artist.name}</Media.Heading>
+                      <p className="artist-summary" dangerouslySetInnerHTML={{__html: artist.bio.summary}} />
                     </Media.Body>
                 </Media>
             </div>

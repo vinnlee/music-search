@@ -2,7 +2,6 @@ body {
     background: #00587A;
     color: #D3EBB2;
 }
-
 a {
     color: #3aaf85;
 }
@@ -10,41 +9,42 @@ a:hover {
     color: #02b875;
     text-decoration: underline;
 }
-
 .app {
-    margin-top: 50px;
+    margin-top: 20px;
 }
-
 .app-title {
     text-align: center;
     font-weight: bold;
     font-size: 28px;
     margin-bottom: 25px;
 }
-
 .result-container {
     margin-top: 40px;
 }
-
 .artist-name {
     font-size: 22px;
     color: #ecf0f1;
 }
-
 .artist-summary {
     font-size: 16px;
     color: #bdc3c7;
 }
-
 .album-card {
     text-align: center;
     margin-bottom: 30px;
+    display: block;
+}
+.album-card img {
+    width: 100%;
 }
 .album-card:hover {
     text-decoration: none;
 }
-
 .album-title {
     text-align: center;
     margin: 30px 0;
+}
+.albums-list {
+    display: flex;
+    flex-wrap: wrap;
 }
