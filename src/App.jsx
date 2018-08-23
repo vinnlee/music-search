@@ -9,6 +9,7 @@ class App extends Component {
         super(props);
         this.state = {
             query: "",
+            keyword: null,
             artist: null,
             album: []
         }
@@ -17,27 +18,33 @@ class App extends Component {
     search() {
         const ROOT_URL = "https://ws.audioscrobbler.com/2.0/";
         const API_KEY  = process.env.REACT_APP_SECRET_API_KEY;
+        const SEARCH_ARTIST = "artist.search";
         const GET_ARTIST = "artist.getinfo";
         const GET_ALBUM = "artist.gettopalbums";
         
-        let artist_info = `${ROOT_URL}?method=${GET_ARTIST}&artist=${this.state.query}&api_key=${API_KEY}&format=json`;
-        let album_info = `${ROOT_URL}?method=${GET_ALBUM}&artist=${this.state.query}&api_key=${API_KEY}&limit=30&format=json`;
-
-        fetch(artist_info, {
-            method: "GET"
-        })
+        let artist_search_result = `${ROOT_URL}?method=${SEARCH_ARTIST}&artist=${this.state.query}&api_key=${API_KEY}&format=json`;
+        
+        fetch(artist_search_result, { method: "GET" })
         .then(response => response.json())
         .then(result => {
-            const {artist} = result; // artist = result.artist
-            this.setState({artist});
-            fetch(album_info, {
-                method: "GET"
-            })
+            const { results } = result;
+            this.setState({ keyword: results.artistmatches.artist[0].name });
+            
+            let artist_info = `${ROOT_URL}?method=${GET_ARTIST}&artist=${this.state.keyword}&api_key=${API_KEY}&format=json`;
+            let album_info = `${ROOT_URL}?method=${GET_ALBUM}&artist=${this.state.keyword}&api_key=${API_KEY}&limit=30&format=json`;
+            
+            fetch(artist_info, { method: "GET" })
             .then(response => response.json())
             .then(result => {
-                const { album } = result.topalbums;
-                this.setState({album});
-            })
+                const {artist} = result; // artist = result.artist
+                this.setState({artist});
+                fetch(album_info, { method: "GET" })
+                .then(response => response.json())
+                .then(result => {
+                    const { album } = result.topalbums;
+                    this.setState({album});
+                })
+            }); 
         });
     }
 

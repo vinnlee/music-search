@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col, Thumbnail } from 'react-bootstrap';
 import './App.css';
+import notfound from './images/notfound.png';
 
 class Album extends Component {
     render() {
@@ -13,7 +14,7 @@ class Album extends Component {
                 topalbum.filter((album, index) => {
                     return album.name !== "(null)";
                 }).map((album, index) => {
-                    let albumImage = (album.image[3]['#text'] !== "") ? "https://lastfm-img2.akamaized.net/i/u/400x400/" + album.image[3]['#text'].split('/').pop() : "https://via.placeholder.com/400x400?text=Image+Not+Found";
+                    let albumImage = (album.image[3]['#text'] !== "") ? "https://lastfm-img2.akamaized.net/i/u/400x400/" + album.image[3]['#text'].split('/').pop() : notfound;
                     return(
                         <Col xs={6} md={4} key={index}>
                             <Thumbnail src={albumImage} alt="" href={album.url} className="album-card" target="_blank">
