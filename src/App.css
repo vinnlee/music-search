@@ -1,50 +1,110 @@
+html,
 body {
-    background: #00587A;
-    color: #D3EBB2;
+  height: 100%;
 }
+
+body {
+  background: #f9f9f9;
+  color: #333333;
+}
+
 a {
-    color: #3aaf85;
+  color: var(--blue);
 }
+
 a:hover {
-    color: #02b875;
-    text-decoration: underline;
+  color: var(--blue);
+  text-decoration: underline;
 }
+
+#root {
+  min-height: 100%;
+  position: relative;
+}
+
 .app {
-    margin-top: 20px;
+  padding-top: 20px;
 }
+
 .app-title {
-    text-align: center;
-    font-weight: bold;
-    font-size: 28px;
-    margin-bottom: 25px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 28px;
+  margin-bottom: 25px;
 }
+
 .result-container {
-    margin-top: 40px;
+  margin-top: 40px;
 }
+
 .artist-name {
-    font-size: 22px;
-    color: #ecf0f1;
+  font-size: 22px;
+  color: #ecf0f1;
 }
+
+.artist-image {
+  margin-right: 20px;
+}
+
 .artist-summary {
-    font-size: 16px;
-    color: #bdc3c7;
+  font-size: 16px;
 }
+
+.top-albums {
+  padding-bottom: 80px;
+}
+
 .album-card {
-    text-align: center;
-    margin-bottom: 30px;
-    display: block;
+  text-align: center;
+  margin-bottom: 30px;
+  display: block;
 }
+
 .album-card img {
-    width: 100%;
+  width: 100%;
 }
+
 .album-card:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
+
 .album-title {
-    text-align: center;
-    margin: 30px 0;
+  text-align: center;
+  margin: 30px 0;
+  font-size: 22px;
 }
+
 .albums-list {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.albums-list-item {
+  margin-bottom: 5px;
+  display: block;
+}
+
+.albums-list-item .figure-caption {
+  text-align: center;
+  font-size: 16px;
+  color: #333333;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.albums-list-item:hover .figure-caption {
+  color: #007bff;
+}
+
+.form-group {
+  position: relative;
+}
+
+.copyright {
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0 20px;
+  color: var(--secondary);
 }
