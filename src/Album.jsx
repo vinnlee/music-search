@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Figure } from "react-bootstrap";
+import { Row, Col, Figure } from "react-bootstrap";
 import "./App.css";
 import notfound from "./images/notfound.png";
 

@@ -11,18 +11,21 @@ import {
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { debounce } from "lodash";
 import Profile from "./Profile";
 import Album from "./Album";
+import Suggestions from "./Suggestions";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       query: "",
-      hideSearchList: true,
+      showSuggestion: false,
       keyword: null,
       artist: null,
-      album: []
+      album: [],
+      suggestion: []
     };
   }
 
@@ -33,23 +36,27 @@ class App extends Component {
     const GET_ARTIST = "artist.getinfo";
     const GET_ALBUM = "artist.gettopalbums";
 
-    let artist_search_result = `${ROOT_URL}?method=${SEARCH_ARTIST}&artist=${this.state.query}&api_key=${API_KEY}&format=json`;
+    let artistSearchResult = `${ROOT_URL}?method=${SEARCH_ARTIST}&artist=${this.state.query}&api_key=${API_KEY}&format=json`;
 
-    fetch(artist_search_result, { method: "GET" })
+    if (this.state.showSuggestion) {
+      this.setState({ showSuggestion: false });
+    }
+
+    fetch(artistSearchResult, { method: "GET" })
       .then(response => response.json())
       .then(result => {
         const { results } = result;
         this.setState({ keyword: results.artistmatches.artist[0].name });
 
-        let artist_info = `${ROOT_URL}?method=${GET_ARTIST}&artist=${this.state.keyword}&api_key=${API_KEY}&format=json`;
-        let album_info = `${ROOT_URL}?method=${GET_ALBUM}&artist=${this.state.keyword}&api_key=${API_KEY}&limit=30&format=json`;
+        let artistInfo = `${ROOT_URL}?method=${GET_ARTIST}&artist=${this.state.keyword}&api_key=${API_KEY}&format=json`;
+        let albumInfo = `${ROOT_URL}?method=${GET_ALBUM}&artist=${this.state.keyword}&api_key=${API_KEY}&limit=30&format=json`;
 
-        fetch(artist_info, { method: "GET" })
+        fetch(artistInfo, { method: "GET" })
           .then(response => response.json())
           .then(result => {
             const { artist } = result;
             this.setState({ artist });
-            fetch(album_info, { method: "GET" })
+            fetch(albumInfo, { method: "GET" })
               .then(response => response.json())
               .then(result => {
                 const { album } = result.topalbums;
@@ -59,6 +66,25 @@ class App extends Component {
       });
   }
 
+  suggestions = debounce(() => {
+    const ROOT_URL = "https://ws.audioscrobbler.com/2.0/";
+    const API_KEY = process.env.REACT_APP_SECRET_API_KEY;
+    const SEARCH_ARTIST = "artist.search";
+    const SEARCH_LIMIT = 10;
+
+    let artistSearchResult = `${ROOT_URL}?method=${SEARCH_ARTIST}&artist=${this.state.query}&api_key=${API_KEY}&limit=${SEARCH_LIMIT}&format=json`;
+    fetch(artistSearchResult, { method: "GET" })
+      .then(response => response.json())
+      .then(result => {
+        const { results } = result;
+        this.setState({ suggestion: results.artistmatches.artist });
+      });
+  }, 400);
+
+  onSelectSuggestion = keyword => {
+    this.setState({ query: keyword });
+  };
+
   render() {
     return (
       <div className="app">
@@ -66,32 +92,45 @@ class App extends Component {
           <h3 className="app-title">Music Search</h3>
           <Row>
             <Col>
-              <FormGroup>
-                <InputGroup>
-                  <FormControl
-                    type="text"
-                    placeholder="Search the artist..."
-                    value={this.state.query}
-                    onChange={event => {
-                      this.setState({ query: event.target.value });
-                    }}
-                    onKeyPress={event => {
-                      if (event.key === "Enter") {
-                        this.search();
-                      }
-                    }}
-                    onFocus={() => {
-                      this.setState({ hideSearchList: false });
-                    }}
-                    style={{ boxShadow: "none" }}
+              <div className="search-container">
+                <FormGroup>
+                  <InputGroup>
+                    <FormControl
+                      type="text"
+                      placeholder="Search the artist..."
+                      value={this.state.query}
+                      onChange={event => {
+                        this.setState({ query: event.target.value });
+                      }}
+                      onKeyPress={event => {
+                        if (event.key === "Enter") {
+                          this.search();
+                        } else {
+                          if (
+                            this.state.query &&
+                            this.state.query.length >= 2
+                          ) {
+                            this.suggestions();
+                            this.setState({ showSuggestion: true });
+                          }
+                        }
+                      }}
+                      style={{ boxShadow: "none" }}
+                    />
+                    <InputGroup.Append>
+                      <Button onClick={() => this.search()}>
+                        <FontAwesomeIcon icon={faSearch} />
+                      </Button>
+                    </InputGroup.Append>
+                  </InputGroup>
+                </FormGroup>
+                {this.state.showSuggestion ? (
+                  <Suggestions
+                    result={this.state.suggestion}
+                    onSelectItem={this.onSelectSuggestion}
                   />
-                  <InputGroup.Append>
-                    <Button onClick={() => this.search()}>
-                      <FontAwesomeIcon icon={faSearch} />
-                    </Button>
-                  </InputGroup.Append>
-                </InputGroup>
-              </FormGroup>
+                ) : null}
+              </div>
             </Col>
           </Row>
           {this.state.artist !== null ? (
