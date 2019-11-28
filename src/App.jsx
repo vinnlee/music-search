@@ -15,6 +15,7 @@ import { debounce } from "lodash";
 import Profile from "./Profile";
 import Album from "./Album";
 import Suggestions from "./Suggestions";
+import { api, artist } from "./constants";
 
 class App extends Component {
   constructor(props) {
@@ -30,13 +31,7 @@ class App extends Component {
   }
 
   search() {
-    const ROOT_URL = "https://ws.audioscrobbler.com/2.0/";
-    const API_KEY = process.env.REACT_APP_SECRET_API_KEY;
-    const SEARCH_ARTIST = "artist.search";
-    const GET_ARTIST = "artist.getinfo";
-    const GET_ALBUM = "artist.gettopalbums";
-
-    let artistSearchResult = `${ROOT_URL}?method=${SEARCH_ARTIST}&artist=${this.state.query}&api_key=${API_KEY}&format=json`;
+    let artistSearchResult = `${api.root}?method=${artist.search}&artist=${this.state.query}&api_key=${api.key}&format=json`;
 
     if (this.state.showSuggestion) {
       this.setState({ showSuggestion: false });
@@ -48,8 +43,8 @@ class App extends Component {
         const { results } = result;
         this.setState({ keyword: results.artistmatches.artist[0].name });
 
-        let artistInfo = `${ROOT_URL}?method=${GET_ARTIST}&artist=${this.state.keyword}&api_key=${API_KEY}&format=json`;
-        let albumInfo = `${ROOT_URL}?method=${GET_ALBUM}&artist=${this.state.keyword}&api_key=${API_KEY}&limit=30&format=json`;
+        let artistInfo = `${api.root}?method=${artist.getInfo}&artist=${this.state.keyword}&api_key=${api.key}&format=json`;
+        let albumInfo = `${api.root}?method=${artist.getTopAlbums}&artist=${this.state.keyword}&api_key=${api.key}&limit=30&format=json`;
 
         fetch(artistInfo, { method: "GET" })
           .then(response => response.json())
@@ -67,12 +62,7 @@ class App extends Component {
   }
 
   suggestions = debounce(() => {
-    const ROOT_URL = "https://ws.audioscrobbler.com/2.0/";
-    const API_KEY = process.env.REACT_APP_SECRET_API_KEY;
-    const SEARCH_ARTIST = "artist.search";
-    const SEARCH_LIMIT = 10;
-
-    let artistSearchResult = `${ROOT_URL}?method=${SEARCH_ARTIST}&artist=${this.state.query}&api_key=${API_KEY}&limit=${SEARCH_LIMIT}&format=json`;
+    let artistSearchResult = `${api.root}?method=${artist.search}&artist=${this.state.query}&api_key=${api.key}&limit=${artist.limit}&format=json`;
     fetch(artistSearchResult, { method: "GET" })
       .then(response => response.json())
       .then(result => {
